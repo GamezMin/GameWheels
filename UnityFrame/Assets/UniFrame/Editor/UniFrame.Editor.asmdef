@@ -1,3 +1,17 @@
 {
-	"name": "UniFrame.Editor"
+    "name": "UniFrame.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4d1926c9df5b052469a1c63448b7609a",
+        "GUID:599d9b33a5138cb4baa2cd9d029f105d"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

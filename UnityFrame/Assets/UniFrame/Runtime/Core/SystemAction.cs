@@ -1,0 +1,99 @@
+﻿#if UNITY_EDITOR
+#endif
+
+namespace GameFrame.Runtime
+{
+    public static class SystemAction
+    {
+        public static bool SystemInitialize(this ISystem system)
+        {
+            if (system is IInitializeSystem ecsinitsystem)
+            {
+                ecsinitsystem.OnInitialize();
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool SystemInitialize<P1>(this ISystem system, P1 p1)
+        {
+            if (system is IInitializeSystem<P1> ecsinitsystem)
+            {
+                ecsinitsystem.OnInitialize(p1);
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool SystemInitialize<P1, P2>(this ISystem system, P1 p1, P2 p2)
+        {
+            if (system is IInitializeSystem<P1, P2> ecsinitsystem)
+            {
+                ecsinitsystem.OnInitialize(p1, p2);
+                return true;
+            }
+
+            return false;
+        }
+
+
+        public static bool SystemPreShow(this ISystem system, bool p1)
+        {
+            if (system is IPreShowSystem showsystem)
+            {
+                showsystem.OnPreShow(p1);
+                return true;
+            }
+
+            return false;
+        }
+
+
+        public static bool SystemShow(this ISystem system)
+        {
+            if (system is IShowSystem showsystem)
+            {
+                showsystem.OnShow();
+                return true;
+            }
+
+            return false;
+        }
+
+
+        public static bool SystemHide(this ISystem system)
+        {
+            if (system is IHideSystem showsystem)
+            {
+                showsystem.OnHide();
+                return true;
+            }
+
+            return false;
+        }
+
+
+        public static int GetUpdateSystemType(this ISystem system)
+        {
+            int key = 0;
+            if (system is IUpdateSystem)
+            {
+                key += 1 << UpdateRunType.Update;
+            }
+
+            if (system is ILateUpdateSystem)
+            {
+                key += 1 << UpdateRunType.LateUpdate;
+            }
+
+            if (system is IFixedUpdateSystem)
+            {
+                key += 1 << UpdateRunType.FixedUpdate;
+            }
+
+            return key;
+        }
+    }
+}

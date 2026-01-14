@@ -1,0 +1,57 @@
+﻿using UnityEngine;
+
+namespace GameFrame.Runtime
+{
+    public class UnityGameObjectItem : ObjectBase
+    {
+        public GameObject gameObject { get; private set; }
+
+        public override void Initialize(object initData = null)
+        {
+            base.Initialize(initData);
+            gameObject = new GameObject();
+        }
+
+        public override void OnSpawn(object obj)
+        {
+            base.OnSpawn(obj);
+            gameObject.transform.SetParent((Transform) obj);
+            gameObject.transform.localPosition = Vector3.zero;
+            gameObject.transform.localScale = Vector3.one;
+            gameObject.transform.localRotation = Quaternion.identity;
+        }
+
+        public override void OnUnspawn()
+        {
+#if UNITY_EDITOR
+            var goCacheParent = GameObjectPool.ObjectCacheArea.transform.Find("ComGameObject");
+            if (goCacheParent == null)
+            {
+                var go = new GameObject();
+                goCacheParent = go.transform;
+                goCacheParent.name = "ComGameObject";
+                goCacheParent.transform.SetParent(GameObjectPool.ObjectCacheArea.transform);
+            }
+#else
+          var  goCacheParent = GameObjectPool.ObjectCacheArea.transform;
+#endif
+            Component[] components = gameObject.GetComponents<Component>();
+            foreach (Component component in components)
+            {
+                if (!(component is Transform))
+                {
+                    Object.Destroy(component);
+                }
+            }
+
+            gameObject.transform.SetParent(goCacheParent);
+            base.OnUnspawn();
+        }
+
+        public override void Dispose()
+        {
+            Object.Destroy(gameObject);
+            base.Dispose();
+        }
+    }
+}
